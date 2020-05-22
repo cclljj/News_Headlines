@@ -23,12 +23,26 @@
   stroke-width: 2px;
 }
 
+#showinfo {
+	width: 420px;
+      	position: absolute;
+	display: none;
+	pointer-events: none;
+	text-align: left;
+	font-size: 14px;
+        font-family: Arial, Helvetica, sans-serif;
+        z-index: 999;
+  	color: #000050;
+  	background-color: #CECEEF;
+  	font-weight: 300;
+      }
 </style>
 
 </head>
 <body>
 <font size="+3">World News Headlines</font> - <i>Powered by <a href="https://newsapi.org">NewsAPI.org</a></i>
-<p>
+<p><span id="showinfo"></span>
+
 
 <!-- load the d3.js library -->	
 <script src="https://d3js.org/d3.v4.min.js"></script>
@@ -138,6 +152,34 @@ function update(source) {
 		} else {
 			return d.data.title; 
 		}
+	})
+      .on("mouseover", function(d) {
+		if (d.data.url !== undefined){
+			if (d.data.urlToImage != null){
+				d3.select('#showinfo')
+				.html(d.data.description + "<br><img src=\"" + d.data.urlToImage + "\" width=400>");
+			} else {
+				d3.select('#showinfo')
+				.html(d.data.description);
+
+			}
+			d3.select('#showinfo')
+				.style("left", (d3.event.pageX + 7) + "px")
+				.style("top", (d3.event.pageY - 15) + "px")
+				.style("padding", "5px")
+				.style("border", "solid #ccc 1px")
+				.style("display", "block")
+				.style("opacity", 1);
+		}
+	})
+      .on("mouseout", function(d) {
+		if (d.data.url !== undefined){
+			d3.select('#showinfo').html("")
+				.style("padding", 0)
+				.style("border", "0px")
+				.style("opacity",0)
+				.style("display","none");
+		}
 	});
 
   // UPDATE
@@ -242,4 +284,3 @@ Designed by <a href="https://github.com/cclljj/News_Headlines">cclljj</a> (2020)
 Credit to <a href="https://bl.ocks.org/d3noob/43a860bc0024792f8803bba8ca0d5ecd">Collapsible tree diagram in v4, d3noob's Block</a>
 </body>
 </html>
-
